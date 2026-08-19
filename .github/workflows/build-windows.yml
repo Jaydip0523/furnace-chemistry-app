@@ -1,0 +1,45 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "windows/**"
+      - "app/src/main/assets/**"
+      - ".github/workflows/build-windows.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install packaging tools
+        run: npm install
+
+      - name: Build Windows installer and portable app
+        run: npm run dist
+
+      - name: Upload Windows applications
+        uses: actions/upload-artifact@v4
+        with:
+          name: furnace-chemistry-control-windows
+          path: |
+            windows/dist/*.exe
+            !windows/dist/*uninstaller*.exe
+          if-no-files-found: error
+          retention-days: 30

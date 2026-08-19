@@ -1,0 +1,51 @@
+{
+  "name": "protocol-furnace-chemistry",
+  "version": "17.0.0",
+  "description": "Protocol Furnace Chemistry Control for Windows",
+  "main": "main.js",
+  "author": "Protocol Conticast & Extrusion",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis portable"
+  },
+  "devDependencies": {
+    "electron": "35.7.5",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "com.protocol.furnacechemistry.windows",
+    "productName": "Furnace Chemistry Control",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js"
+    ],
+    "extraResources": [
+      {
+        "from": "../app/src/main/assets",
+        "to": "assets",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": [
+        {"target": "nsis", "arch": ["x64"]},
+        {"target": "portable", "arch": ["x64"]}
+      ]
+    },
+    "nsis": {
+      "artifactName": "Furnace-Chemistry-Control-Windows-Setup-${version}-${arch}.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Furnace Chemistry Control"
+    },
+    "portable": {
+      "artifactName": "Furnace-Chemistry-Control-Windows-Portable-${version}-${arch}.${ext}"
+    }
+  }
+}
